@@ -12,7 +12,8 @@ This application solves the Knapsack Problem, an optimization problem that maxim
 
 ## Prerequisites
 
-- Elixir >= 1.16.0-rc.0
+- Erlang/OTP 26
+- Elixir >= 1.15.7
 
 #
 
@@ -28,12 +29,12 @@ This application solves the Knapsack Problem, an optimization problem that maxim
 - Execute this command to complile application `$ mix escript.build`.
 - Run the application using the command: `$ ./knapsack_problem`
 
-#
+<!-- #
 
-<!-- ## Running Tests -->
+## Running Tests
 
-<!-- - Navigate to the project's root directory. -->
-<!-- - Run tests with the command: `$ mix test` -->
+- Navigate to the project's root directory.
+- Run tests with the command: `$ mix test` -->
 
 #
 
