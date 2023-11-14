@@ -5,7 +5,7 @@ defmodule KnapsackProblem.MixProject do
     [
       app: :knapsack_problem,
       version: "0.1.0",
-      elixir: "~> 1.16-rc",
+      elixir: "~> 1.15.7",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       escript: [main_module: Knapsack.Main]
