@@ -24,3 +24,9 @@ knapsack_problem-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+# Ignore all logs and binaries.
+knapsack_problem
+
+# Ignore generated docs.
+settings.json
