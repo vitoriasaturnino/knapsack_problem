@@ -1,21 +1,45 @@
-# KnapsackProblem
+# Knapsack Problem
 
-**TODO: Add description**
+## About
 
-## Installation
+This application solves the Knapsack Problem, an optimization problem that maximizes the value of a knapsack while respecting a weight limit. It uses Elixir for efficient computation and dynamic programming techniques.
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `knapsack_problem` to your list of dependencies in `mix.exs`:
+<br/>
 
-```elixir
-def deps do
-  [
-    {:knapsack_problem, "~> 0.1.0"}
-  ]
-end
-```
+![Elixir](https://img.shields.io/badge/Elixir-%234B275F.svg?style=for-the-badge&logo=elixir&logoColor=white)
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/knapsack_problem>.
+#
+
+## Prerequisites
+
+- Elixir >= 1.16.0-rc.0
+
+#
+
+## Setup
+
+- Clone the repository to your local machine `$ git clone https://github.com/vitoriasaturnino/knapsack_problem.git`.
+- Navigate to the project directory `$ knapsack_problem`.
+
+#
+
+## Running the Application
+
+- Execute this command to complile application `$ mix escript.build`.
+- Run the application using the command: `$ ./knapsack_problem`
+
+#
+
+<!-- ## Running Tests -->
+
+<!-- - Navigate to the project's root directory. -->
+<!-- - Run tests with the command: `$ mix test` -->
+
+#
+
+## Authors
+
+<img width=120px height=120px style="border-radius: 50%" src="https://avatars.githubusercontent.com/u/68754092?v=4" alt="Vitória Moura"/>
+
+Crafted with passion by [Vitória Moura](https://www.linkedin.com/in/vit%C3%B3ria-cristina-saturnino-de-moura-6393391b0/) 🌟
 
