@@ -26,15 +26,15 @@ This application solves the Knapsack Problem, an optimization problem that maxim
 
 ## Running the Application
 
-- Execute this command to complile application `$ mix escript.build`.
+- Execute this command to compile application `$ mix escript.build`.
 - Run the application using the command: `$ ./knapsack_problem`
 
-<!-- #
+#
 
 ## Running Tests
 
 - Navigate to the project's root directory.
-- Run tests with the command: `$ mix test` -->
+- Run tests with the command: `$ mix test`
 
 #
 
