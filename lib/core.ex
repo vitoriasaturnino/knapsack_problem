@@ -4,7 +4,7 @@ defmodule Knapsack.Core do
   """
 
   @doc """
-  Função principal para resolver o problema da mochila.
+  Resolve o problema da mochila utilizando programação dinâmica.
   """
   @spec solve_knapsack_problem(list({integer(), integer()}), integer()) ::
           {:ok, list({integer(), integer()}), integer()}
@@ -16,72 +16,55 @@ defmodule Knapsack.Core do
   end
 
   defp build_dynamic_prog_matrix(items, capacity) do
-    Enum.reduce(0..length(items), Map.new(), fn item_index, acc ->
-      Enum.reduce(0..capacity, acc, fn current_capacity, acc ->
-        process_item_for_capacity(acc, item_index, current_capacity, items)
-      end)
-    end)
+    0..length(items)
+    |> Enum.reduce(Map.new(), &process_item_row(&1, &2, capacity, items))
   end
 
-  defp reconstruct_selected_items(dynamic_prog_matrix, items, capacity) do
-    {selected_items, _} =
-      reconstruct_items(dynamic_prog_matrix, items, length(items), capacity, [])
+  defp process_item_row(item_index, acc, capacity, items) do
+    0..capacity
+    |> Enum.reduce(acc, &process_capacity_for_item(&1, item_index, &2, items))
+  end
 
+  defp process_capacity_for_item(current_capacity, item_index, acc, items) do
+    case {item_index, current_capacity} do
+      {0, _} -> Map.put(acc, {item_index, current_capacity}, 0)
+      {_, 0} -> Map.put(acc, {item_index, current_capacity}, 0)
+      _ -> update_dp_matrix(acc, item_index, current_capacity, Enum.at(items, item_index - 1))
+    end
+  end
+
+  defp update_dp_matrix(dp_matrix, item_index, current_capacity, {value, weight}) do
+    if current_capacity < weight do
+      Map.put(
+        dp_matrix,
+        {item_index, current_capacity},
+        Map.get(dp_matrix, {item_index - 1, current_capacity})
+      )
+    else
+      include_value = value + Map.get(dp_matrix, {item_index - 1, current_capacity - weight})
+      exclude_value = Map.get(dp_matrix, {item_index - 1, current_capacity})
+      Map.put(dp_matrix, {item_index, current_capacity}, max(include_value, exclude_value))
+    end
+  end
+
+  defp reconstruct_selected_items(dp_matrix, items, capacity) do
+    {selected_items, _} = reconstruct_items(dp_matrix, items, length(items), capacity, [])
     Enum.reverse(selected_items)
   end
 
-  defp reconstruct_items(_, _, 0, _, selected_items), do: {selected_items, 0}
-  defp reconstruct_items(_, _, _, 0, selected_items), do: {selected_items, 0}
+  defp reconstruct_items(_dp_matrix, _items, 0, _, acc), do: {acc, 0}
+  defp reconstruct_items(_dp_matrix, _items, _, 0, acc), do: {acc, 0}
 
-  defp reconstruct_items(dp, items, i, j, selected_items) do
-    case {Map.get(dp, {i, j}), Map.get(dp, {i - 1, j})} do
-      {value, value} ->
-        reconstruct_items(dp, items, i - 1, j, selected_items)
-
-      _ ->
-        {_, weight} = Enum.at(items, i - 1)
-        reconstruct_items(dp, items, i - 1, j - weight, [Enum.at(items, i - 1) | selected_items])
-    end
-  end
-
-  defp process_item_for_capacity(acc, item_index, current_capacity, items) do
-    case {item_index, current_capacity} do
-      {0, _} ->
-        Map.put(acc, {item_index, current_capacity}, 0)
-
-      {_, 0} ->
-        Map.put(acc, {item_index, current_capacity}, 0)
-
-      _ ->
-        {value, weight} = Enum.at(items, item_index - 1)
-        update_dynamic_programming_matrix(acc, item_index, current_capacity, {value, weight})
-    end
-  end
-
-  defp update_dynamic_programming_matrix(dynamic_prog_matrix, item_index, current_capacity, item) do
-    {value, weight} = item
-
-    if current_capacity < weight do
-      Map.put(
-        dynamic_prog_matrix,
-        {item_index, current_capacity},
-        Map.get(dynamic_prog_matrix, {item_index - 1, current_capacity})
-      )
+  defp reconstruct_items(dp_matrix, items, item_index, current_capacity, acc) do
+    if Map.get(dp_matrix, {item_index, current_capacity}) ==
+         Map.get(dp_matrix, {item_index - 1, current_capacity}) do
+      reconstruct_items(dp_matrix, items, item_index - 1, current_capacity, acc)
     else
-      calculate_max_value(dynamic_prog_matrix, item_index, current_capacity, value, weight)
+      {_value, weight} = Enum.at(items, item_index - 1)
+
+      reconstruct_items(dp_matrix, items, item_index - 1, current_capacity - weight, [
+        Enum.at(items, item_index - 1) | acc
+      ])
     end
-  end
-
-  defp calculate_max_value(dynamic_prog_matrix, item_index, current_capacity, value, weight) do
-    include_value =
-      value + Map.get(dynamic_prog_matrix, {item_index - 1, current_capacity - weight})
-
-    exclude_value = Map.get(dynamic_prog_matrix, {item_index - 1, current_capacity})
-
-    Map.put(
-      dynamic_prog_matrix,
-      {item_index, current_capacity},
-      max(include_value, exclude_value)
-    )
   end
 end
