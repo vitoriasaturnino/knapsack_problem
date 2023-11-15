@@ -4,53 +4,62 @@ defmodule Knapsack.Input do
   """
 
   @doc """
-  Função principal para coletar dados de entrada para o problema da mochila.
+  Coleta dados de entrada para o problema da mochila.
   """
   @spec run(any()) :: {integer(), list({integer(), integer()})}
   def run(_args \\ []) do
-    capacity = get_number_from_user("Digite a capacidade da mochila:")
-    items = get_items_from_user()
+    capacity = InputUtils.get_validated_number("Digite a capacidade da mochila:")
+    items = collect_items()
 
     {capacity, items}
   end
 
-  @spec get_items_from_user() :: list({integer(), integer()})
-  defp get_items_from_user(items \\ []) do
-    print_splitter()
+  @spec collect_items() :: list({integer(), integer()})
+  defp collect_items(items \\ []) do
+    InputUtils.print_splitter()
 
-    if get_confirmation_from_user("Deseja inserir um item? (s/n)") do
-      item = get_item_from_user()
+    if InputUtils.get_confirmation("Deseja inserir um item? (s/n)") do
+      item = get_item()
       IO.puts("Item inserido com sucesso!")
-      get_items_from_user([item | items])
+      collect_items([item | items])
     else
       Enum.reverse(items)
     end
   end
 
-  @spec get_confirmation_from_user(String.t()) :: boolean()
-  defp get_confirmation_from_user(message) do
-    user_input(message) == "s"
-  end
-
-  @spec get_item_from_user() :: {integer(), integer()}
-  defp get_item_from_user do
-    weight = get_number_from_user("Digite o peso do item:")
-    value = get_number_from_user("Digite o valor do item:")
+  @spec get_item() :: {integer(), integer()}
+  defp get_item do
+    weight = InputUtils.get_validated_number("Digite o peso do item:")
+    value = InputUtils.get_validated_number("Digite o valor do item:")
     {value, weight}
   end
+end
 
-  @spec get_number_from_user(String.t()) :: integer()
-  defp get_number_from_user(message) do
-    input = user_input(message)
+defmodule InputUtils do
+  @moduledoc """
+  Módulo de utilitários para entrada de dados.
+  """
 
+  @spec get_validated_number(String.t()) :: integer()
+  def get_validated_number(message) do
+    message
+    |> user_input()
+    |> parse_integer(message)
+  end
+
+  @spec parse_integer(String.t(), String.t()) :: integer()
+  defp parse_integer(input, message) do
     case Integer.parse(input) do
-      {number, _} when is_integer(number) ->
-        number
-
+      {number, _} when is_integer(number) -> number
       _ ->
         IO.puts("Por favor, insira um número inteiro válido.")
-        get_number_from_user(message)
+        get_validated_number(message)
     end
+  end
+
+  @spec get_confirmation(String.t()) :: boolean()
+  def get_confirmation(message) do
+    user_input(message) == "s"
   end
 
   @spec user_input(String.t()) :: String.t()
@@ -60,7 +69,7 @@ defmodule Knapsack.Input do
   end
 
   @spec print_splitter() :: :ok
-  defp print_splitter do
+  def print_splitter do
     IO.puts(String.duplicate("-", 30))
   end
 end
