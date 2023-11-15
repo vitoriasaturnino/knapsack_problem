@@ -11,18 +11,19 @@ defmodule Knapsack do
     dp =
       Enum.reduce(0..length(items), Map.new(), fn i, acc ->
         Enum.reduce(0..capacity, acc, fn j, acc ->
-          if i == 0 or j == 0 do
-            Map.put(acc, {i, j}, 0)
-          else
-            {value, weight} = Enum.at(items, i - 1)
+          case {i, j} do
+            {0, _} -> Map.put(acc, {i, j}, 0)
+            {_, 0} -> Map.put(acc, {i, j}, 0)
+            _ ->
+              {value, weight} = Enum.at(items, i - 1)
 
-            if j < weight do
-              Map.put(acc, {i, j}, Map.get(acc, {i - 1, j}))
-            else
-              include = value + Map.get(acc, {i - 1, j - weight})
-              exclude = Map.get(acc, {i - 1, j})
-              Map.put(acc, {i, j}, max(include, exclude))
-            end
+              case j < weight do
+                true -> Map.put(acc, {i, j}, Map.get(acc, {i - 1, j}))
+                false ->
+                  include = value + Map.get(acc, {i - 1, j - weight})
+                  exclude = Map.get(acc, {i - 1, j})
+                  Map.put(acc, {i, j}, max(include, exclude))
+              end
           end
         end)
       end)
@@ -35,11 +36,11 @@ defmodule Knapsack do
   defp reconstruct_items(_, _, _, 0, selected_items), do: {selected_items, 0}
 
   defp reconstruct_items(dp, items, i, j, selected_items) do
-    if Map.get(dp, {i, j}) == Map.get(dp, {i - 1, j}) do
-      reconstruct_items(dp, items, i - 1, j, selected_items)
-    else
-      {_, weight} = Enum.at(items, i - 1)
-      reconstruct_items(dp, items, i - 1, j - weight, [Enum.at(items, i - 1) | selected_items])
+    case {Map.get(dp, {i, j}), Map.get(dp, {i - 1, j})} do
+      {value, value} -> reconstruct_items(dp, items, i - 1, j, selected_items)
+      _ ->
+        {_, weight} = Enum.at(items, i - 1)
+        reconstruct_items(dp, items, i - 1, j - weight, [Enum.at(items, i - 1) | selected_items])
     end
   end
 end
