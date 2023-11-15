@@ -8,6 +8,8 @@ defmodule Knapsack do
   @doc """
   Função principal do programa.
   """
+
+  @spec main([binary()]) :: :ok
   def main(_args \\ []) do
     {capacity, items} = Input.run()
 
