@@ -1,7 +1,9 @@
-defmodule Knapsack.Main do
+defmodule Knapsack do
   @moduledoc """
   Módulo principal do problema da mochila.
   """
+
+  alias Knapsack.{Core, Input}
 
   @doc """
   Função principal do programa.
@@ -16,7 +18,7 @@ defmodule Knapsack.Main do
       _ ->
         items
         |> Enum.reverse()
-        |> Knapsack.solve(capacity)
+        |> Core.solve_knapsack_problem(capacity)
         |> IO.inspect(label: "Resultado")
     end
   end

@@ -8,7 +8,7 @@ defmodule KnapsackProblem.MixProject do
       elixir: "~> 1.15.7",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      escript: [main_module: Knapsack.Main]
+      escript: [main_module: Knapsack]
     ]
   end
 

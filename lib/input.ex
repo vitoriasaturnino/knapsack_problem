@@ -1,4 +1,4 @@
-defmodule Input do
+defmodule Knapsack.Input do
   @moduledoc """
   Módulo responsável por coletar dados de entrada para o problema da mochila.
   """
@@ -17,6 +17,7 @@ defmodule Input do
   @spec get_items_from_user() :: list({integer(), integer()})
   defp get_items_from_user(items \\ []) do
     print_splitter()
+
     if get_confirmation_from_user("Deseja inserir um item? (s/n)") do
       item = get_item_from_user()
       IO.puts("Item inserido com sucesso!")
@@ -41,9 +42,11 @@ defmodule Input do
   @spec get_number_from_user(String.t()) :: integer()
   defp get_number_from_user(message) do
     input = user_input(message)
+
     case Integer.parse(input) do
       {number, _} when is_integer(number) ->
         number
+
       _ ->
         IO.puts("Por favor, insira um número inteiro válido.")
         get_number_from_user(message)
